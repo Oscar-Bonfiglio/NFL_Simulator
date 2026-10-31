@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An interactive NFL season simulator.">
+    <title>NFL Sim Control Room</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">NFL Sim</p>
+          <h1>Control Room</h1>
+        </div>
+        <div id="season-status" class="status-pill">No active season</div>
+      </header>
+
+      <nav class="control-strip" aria-label="Season controls">
+        <button id="new-season-btn">New Season</button>
+        <button id="next-week-btn">Sim Next Week</button>
+        <button id="regular-season-btn">Sim Regular Season</button>
+        <button id="full-year-btn">Sim Full Year</button>
+        <button id="build-playoffs-btn">Build Playoffs</button>
+        <button id="reset-btn">Reset</button>
+        <a href="#about" class="text-link">About</a>
+      </nav>
+
+      <p id="notice" class="notice" hidden></p>
+
+      <section class="dashboard-grid">
+        <section class="panel">
+          <div class="panel-title"><h2>Season</h2></div>
+          <div class="metric-row">
+            <div class="metric"><span>Progress</span><strong id="progress-value">0%</strong></div>
+            <div class="metric"><span>Current Week</span><strong id="current-week-value">-</strong></div>
+            <div class="metric"><span>Next Week</span><strong id="next-week-value">-</strong></div>
+          </div>
+          <label class="field" for="week-slider">Schedule week <span id="week-label">1</span>
+            <input id="week-slider" type="range" min="1" max="18" value="1">
+          </label>
+          <div id="schedule-list" class="game-list"><p class="empty">Create a season to see the schedule.</p></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title"><h2>Standings</h2></div>
+          <div class="segmented" role="group" aria-label="Conference">
+            <button class="conference-btn active" data-conference="AFC">AFC</button>
+            <button class="conference-btn" data-conference="NFC">NFC</button>
+          </div>
+          <div class="standings-header"><span>Team</span><span>Record</span><span>Diff</span></div>
+          <div id="standings-table" class="table"><p class="empty">Create a season to view standings.</p></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title"><h2>Playoffs</h2></div>
+          <div class="playoff-actions">
+            <button data-round="wildcard">Sim Wild Card</button>
+            <button data-round="divisional">Sim Divisional</button>
+            <button data-round="conference">Sim Conference</button>
+            <button data-round="superbowl">Sim Super Bowl</button>
+          </div>
+          <div id="champion-card"></div>
+          <div id="playoff-list" class="game-list compact"><p class="empty">Complete the season, then build the bracket.</p></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title"><h2>Single Game</h2></div>
+          <form id="single-game-form" class="matchup-form">
+            <label class="field" for="away-team">Away team<select id="away-team"></select></label>
+            <label class="field" for="home-team">Home team<select id="home-team"></select></label>
+            <label class="field" for="weather">Weather
+              <select id="weather">
+                <option>Clear</option><option>Cloudy</option><option>Rain</option>
+                <option>Snow</option><option>Wind</option><option>Dome</option>
+              </select>
+            </label>
+            <button type="submit">Sim Matchup</button>
+          </form>
+          <div id="single-game-result" class="single-game-result"></div>
+        </section>
+      </section>
+
+      <section class="panel stats-band">
+        <div class="panel-title"><h2>Team Stats and Rankings</h2></div>
+        <div id="stats-actions" class="stats-actions">
+          <button class="stat-btn active" data-stat="power">Power</button>
+          <button class="stat-btn" data-stat="passing_yards">Passing</button>
+          <button class="stat-btn" data-stat="rushing_yards">Rushing</button>
+          <button class="stat-btn" data-stat="total_yards">Total Yards</button>
+          <button class="stat-btn" data-stat="touchdowns">Touchdowns</button>
+          <button class="stat-btn" data-stat="yards_per_game">Yards/Game</button>
+        </div>
+        <div id="stats-table" class="stats-table"><p class="empty">Simulate games to populate team stat leaderboards.</p></div>
+      </section>
+
+      <section class="teams-band">
+        <h2>Teams</h2>
+        <p class="section-copy">Select a team to inspect its ratings, current record, and season totals.</p>
+        <div id="team-grid" class="team-grid"></div>
+      </section>
+
+      <section id="about" class="about-band">
+        <div>
+          <p class="eyebrow">About</p>
+          <h2>Built to make an NFL season yours.</h2>
+        </div>
+        <div class="about-copy">
+          <p>NFL Sim is an interactive football season simulator where users can create a season, adjust team ratings, simulate week by week, follow the playoff bracket, and crown a champion.</p>
+          <p>Created by <strong>[Your Name]</strong>. This project combines season scheduling, game simulation, standings, rankings, and playoffs in one browser-based experience.</p>
+          <p class="muted">To personalize this section, replace <code>[Your Name]</code> in <code>static/index.html</code>.</p>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="team-dialog" class="team-dialog">
+      <form id="team-editor" method="dialog">
+        <div class="modal-title">
+          <div><p id="dialog-abbr" class="eyebrow"></p><h2 id="dialog-title"></h2></div>
+          <button value="cancel" class="close-btn">Close</button>
+        </div>
+        <div id="rating-fields"></div>
+        <div id="team-summary" class="team-summary"></div>
+        <div class="modal-actions"><button id="save-team-btn" type="button">Save Ratings</button></div>
+      </form>
+    </dialog>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
